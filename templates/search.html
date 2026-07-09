@@ -1,0 +1,27 @@
+<html>
+	<head>
+
+	</head>
+	<body>
+		<h1>검색결과</h1>
+		<p>인크루트, 고용24, 잡코리아 사이트의 검색결과를 확인할 수 있습니다.</p>
+		<table>
+			<tr>
+				<td>No</td>
+				<td>회사</td>
+				<td>공고제목</td>
+				<td>지역</td>
+				<td>상세보기링크</td>
+			</tr>
+			{% for num, job in jobs %}
+			<tr>
+				<td>{{ num + 1 }}</td> 
+				<td>{{ job["company"] }}</td>
+				<td>{{ job["title"] }}</td>
+				<td>{{ job["location"] }}</td>
+				<td>{{ job["link"] }}</td>
+			</tr>
+			{% endfor %}
+		</table>
+	</body>
+</html>
