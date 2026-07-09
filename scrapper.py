@@ -56,7 +56,7 @@ def search_incruit(keyword):
 
 def search_work24(keyword):
 
-	url = f"https://www.work24.go.kr/wk/a/b/1200/retriveDtlEmpSrchList.do?searchMode=Y&srcKeyword={keyword}&pageIndex=1&resultCnt=20"
+	url = f"https://www.work24.go.kr/wk/a/b/1200/retriveDtlEmpSrchList.do?searchMode=Y&srcKeyword={keyword}&pageIndex=1&resultCnt=20
 
 	r = requests.get(url)
 
@@ -80,7 +80,7 @@ def search_work24(keyword):
 				"location": location.find("p").text.strip(),
 				"link": "https://www.work24.go.kr" + title.get("href")
 			}
-			
+
 			jobs.append(job_data)
 
 	return jobs
