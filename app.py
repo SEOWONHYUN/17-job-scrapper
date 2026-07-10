@@ -6,7 +6,8 @@ from file import save_to_csv
 app = Flask(__name__)
 
 db = {}
-page = 5
+page = 2
+
 
 @app.route("/")
 def home():
@@ -23,22 +24,23 @@ def search():
     incruit_jobs = search_incruit(keyword, page)
     work24_jobs = search_work24(keyword)
 
-    if keyword in db:
-        jobs = db[keyword]
-    else:
-        jobs = incruit_jobs + work24_jobs
-        db[keyword] = jobs
+    jobs = incruit_jobs + work24_jobs
+
+    db[keyword] = jobs
 
     return render_template(
-        "search.html",
-        jobs=enumerate(jobs),
-        keyword=keyword,
-        count=len(jobs)
-    )
+    	"search.html",
+    	incruit_jobs=enumerate(incruit_jobs),
+    	work24_jobs=enumerate(work24_jobs),
+    	keyword=keyword,
+    	count=len(jobs),
+    	incruit_count=len(incruit_jobs),
+    	work24_count=len(work24_jobs)
+)
 
 
 @app.route("/file")
-def file():  # 키워드가 있으면 if문으로 처리 빠르게 하기
+def file():
     keyword = request.args.get("keyword")
 
     if keyword == "":
@@ -58,4 +60,4 @@ def file():  # 키워드가 있으면 if문으로 처리 빠르게 하기
 
 
 if __name__ == "__main__":
-	app.run()
+    app.run(debug=True, port=5001)

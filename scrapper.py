@@ -58,7 +58,7 @@ if __name__ == "__main__":
 
 def search_work24(keyword):
 
-    url = f"https://www.work24.go.kr/wk/a/b/1200/retriveDtlEmpSrchList.do?searchMode=Y&srcKeyword={keyword}&pageIndex=1&resultCnt=20"
+    url = f"https://www.work24.go.kr/wk/a/b/1200/retriveDtlEmpSrchList.do?searchMode=Y&srcKeyword={keyword}&pageIndex=1&resultCnt=60"
 
     r = requests.get(url)
 

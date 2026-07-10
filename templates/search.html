@@ -1,19 +1,21 @@
 <html>
   <head>
+    <meta charset="UTF-8" />
+
     <title>검색결과 | 잡스크래퍼</title>
+
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
     />
   </head>
+
   <body>
     <main class="container">
       <h1>{{ count }} 개의 {{ keyword }} 검색 한 결과 입니다</h1>
-      <p>인크루트, 고용24, 잡코리아 사이트의 검색결과를 확인할 수 있습니다.</p>
-      <a href="/file?keyword={{keyword}}">
-        <button>행복 버튼</button>
-      </a>
-      <p></p>
+
+      <h2>인크루트 결과입니다 {{ incruit_count }}개</h2>
+
       <table>
         <thead data-theme="dark">
           <tr>
@@ -23,19 +25,60 @@
             <th>지역</th>
           </tr>
         </thead>
+
         <tbody>
-          {% for num, job in jobs %}
+          {% for num, job in incruit_jobs %}
           <tr>
             <td>{{ num + 1 }}</td>
+
             <td>{{ job["company"] }}</td>
+
             <td>
-              <a href="{{ job['link'] }}" target="_blank">{{ job["title"] }}</a>
+              <a href="{{ job['link'] }}" target="_blank">
+                {{ job["title"] }}
+              </a>
             </td>
+
             <td>{{ job["location"] }}</td>
           </tr>
           {% endfor %}
         </tbody>
       </table>
+
+      <h2>고용24 결과입니다 {{ work24_count }}개</h2>
+
+      <table>
+        <thead data-theme="dark">
+          <tr>
+            <th>No</th>
+            <th>회사</th>
+            <th>공고제목</th>
+            <th>지역</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for num, job in work24_jobs %}
+          <tr>
+            <td>{{ num + 1 }}</td>
+
+            <td>{{ job["company"] }}</td>
+
+            <td>
+              <a href="{{ job['link'] }}" target="_blank">
+                {{ job["title"] }}
+              </a>
+            </td>
+
+            <td>{{ job["location"] }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <a href="/file?keyword={{keyword}}">
+        <button>행복 버튼</button>
+      </a>
     </main>
   </body>
 </html>
