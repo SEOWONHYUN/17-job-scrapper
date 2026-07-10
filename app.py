@@ -58,4 +58,4 @@ def file():  # 키워드가 있으면 if문으로 처리 빠르게 하기
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+	app.run()
