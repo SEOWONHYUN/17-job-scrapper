@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ keyword }} | FOOTBALL HUB</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style2.css') }}"
+    />
+  </head>
+  <body>
+    <header class="result-topbar">
+      <a href="/" class="brand">
+        <span class="brand-icon">⚽</span>
+        <span>FOOTBALL HUB</span>
+      </a>
+
+      <form action="/search" class="top-search">
+        <input type="text" name="keyword" value="{{ keyword }}" required />
+        <button type="submit">검색</button>
+      </form>
+    </header>
+
+    <main class="result-main">
+      <section class="result-banner">
+        <div>
+          <p class="eyebrow">SEARCH RESULT</p>
+          <h1>{{ keyword }}</h1>
+          <p class="banner-description">
+            경기 일정과 최신 뉴스, 팀 정보를 확인하세요.
+          </p>
+        </div>
+
+        <div class="summary-grid">
+          <article>
+            <span>전체 수집</span><strong>{{ total_count }}</strong
+            ><small>경기</small>
+          </article>
+          <article>
+            <span>검색 결과</span><strong>{{ games|length }}</strong
+            ><small>경기</small>
+          </article>
+          <article>
+            <span>관련 뉴스</span><strong>{{ news|length }}</strong
+            ><small>건</small>
+          </article>
+          <article>
+            <span>스쿼드</span><strong>{{ squad["players"]|length }}</strong
+            ><small>명</small>
+          </article>
+        </div>
+
+        <div class="banner-actions">
+          <a href="/download" class="main-button">CSV 다운로드</a>
+          <a href="/refresh" class="line-button">데이터 다시 수집</a>
+        </div>
+      </section>
+
+      <section class="league-status">
+        {% for key, item in status.items() %}
+        <article>
+          <div class="status-title">
+            <span></span><strong>{{ item["league"] }}</strong>
+          </div>
+          <b>{{ item["count"] }}</b>
+          <p>건 수집 · 예상 {{ item["expected"] }}경기</p>
+        </article>
+        {% endfor %}
+      </section>
+
+      <section class="data-section">
+        <div class="section-heading">
+          <div>
+            <p>MATCH CENTER</p>
+            <h2>경기 일정</h2>
+          </div>
+          <span>{{ games|length }} MATCHES</span>
+        </div>
+
+        {% if games %}
+        <div class="fixture-grid">
+          {% for game in games %}
+          <article class="fixture-card">
+            <div class="fixture-top">
+              <span>{{ game["league"] }}</span>
+              <small>{{ game["date"] }}</small>
+            </div>
+            <div class="match-row">
+              <strong>{{ game["home_team"] }}</strong>
+              <div><small>{{ game["time"] }}</small><b>VS</b></div>
+              <strong>{{ game["away_team"] }}</strong>
+            </div>
+          </article>
+          {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-box">
+          <span>⚽</span>
+          <h3>경기 일정이 없습니다</h3>
+          <p>다른 검색어를 입력해보세요.</p>
+        </div>
+        {% endif %}
+      </section>
+
+      <section class="data-section">
+        <div class="section-heading">
+          <div>
+            <p>LATEST STORIES</p>
+            <h2>관련 최신 뉴스</h2>
+          </div>
+          <span>{{ news|length }} ARTICLES</span>
+        </div>
+
+        {% if news %}
+        <div class="news-grid">
+          {% for article in news %}
+          <article class="news-card">
+            <div class="news-head">
+              <span>{{ article["source"] or "Google News" }}</span>
+              <b>{{ "%02d"|format(loop.index) }}</b>
+            </div>
+            <h3>{{ article["title"] }}</h3>
+            <p>{{ article["published"] }}</p>
+            <a
+              href="{{ article['link'] }}"
+              target="_blank"
+              rel="noopener noreferrer"
+              >기사 보기 →</a
+            >
+          </article>
+          {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-box">
+          <span>📰</span>
+          <h3>관련 뉴스가 없습니다</h3>
+          <p>뉴스 수집 결과가 없습니다.</p>
+        </div>
+        {% endif %}
+      </section>
+
+      <section class="data-section">
+        <div class="section-heading squad-heading">
+          <div>
+            <p>TEAM ROSTER</p>
+            <h2>{{ squad["team_name"] or keyword }} 스쿼드</h2>
+          </div>
+          <div class="heading-actions">
+            <span>{{ squad["players"]|length }} PLAYERS</span>
+            {% if squad["source_url"] %}
+            <a
+              href="{{ squad['source_url'] }}"
+              target="_blank"
+              rel="noopener noreferrer"
+              >원문 보기</a
+            >
+            {% endif %}
+          </div>
+        </div>
+
+        {% if squad["players"] %}
+        <div class="player-grid">
+          {% for player in squad["players"] %}
+          <article class="player-card">
+            <div class="photo-area">
+              {% if player["image_url"] %}
+              <img
+                src="{{ player['image_url'] }}"
+                alt="{{ player['name'] }}"
+                loading="lazy"
+                referrerpolicy="no-referrer"
+              />
+              {% else %}
+              <div class="photo-placeholder">{{ player["name"][0] }}</div>
+              {% endif %}
+              <span class="number-badge">{{ player["number"] }}</span>
+            </div>
+            <div class="player-text">
+              <span>{{ player["position"] }}</span>
+              <h3>{{ player["name"] }}</h3>
+              <p>{{ player["nationality"] }}</p>
+            </div>
+          </article>
+          {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-box">
+          <span>👥</span>
+          <h3>스쿼드 정보가 없습니다</h3>
+          <p>{{ squad["message"] }}</p>
+        </div>
+        {% endif %}
+      </section>
+    </main>
+
+    <footer>FOOTBALL HUB · Flask Web Crawling Project</footer>
+  </body>
+</html>
